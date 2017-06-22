@@ -1,0 +1,30 @@
+{
+    "name": "bentools/string-combinations",
+    "description": "A simple, low-memory footprint function to generate all string combinations from a series of characters.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BenTools\\StringCombinations\\" : "src"
+        },
+        "files": ["src/function.php"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BenTools\\StringCombinations\\Tests\\" : "tests"
+        },
+        "files": [
+            "vendor/symfony/var-dumper/Resources/functions/dump.php"
+        ]
+    },
+    "require": {
+        "php": ">=5.6",
+        "bentools/cartesian-product": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable",
+        "squizlabs/php_codesniffer": "@stable",
+        "satooshi/php-coveralls": "@stable",
+        "symfony/var-dumper": "^3.2"
+    }
+}
