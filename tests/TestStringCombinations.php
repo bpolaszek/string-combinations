@@ -133,18 +133,18 @@ class TestStringCombinations extends TestCase
 
     public function testWithArrayCharset()
     {
-        $sc = string_combinations(['a1', 'b2', 'c3'], 2, 2);
+        $sc = string_combinations(['a1', 'b2', 'c3'], 2, 2, '-');
         $expectedCount = 9; // (3^2)
         $expectedResult = [
-            'a1a1',
-            'a1b2',
-            'a1c3',
-            'b2a1',
-            'b2b2',
-            'b2c3',
-            'c3a1',
-            'c3b2',
-            'c3c3',
+            'a1-a1',
+            'a1-b2',
+            'a1-c3',
+            'b2-a1',
+            'b2-b2',
+            'b2-c3',
+            'c3-a1',
+            'c3-b2',
+            'c3-c3',
         ];
         $this->assertCount($expectedCount, $sc);
         $result = $sc->asArray();

@@ -10,7 +10,7 @@ require_once __DIR__ . '/StringCombinations.php';
  * @param int|null $max
  * @return StringCombinations
  */
-function string_combinations($charset, $min = 1, $max = null)
+function string_combinations($charset, $min = 1, $max = null, $glue = '')
 {
-    return new StringCombinations($charset, $min, $max);
+    return new StringCombinations($charset, $min, $max, $glue);
 }

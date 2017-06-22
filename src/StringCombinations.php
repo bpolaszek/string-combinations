@@ -27,12 +27,19 @@ class StringCombinations implements \IteratorAggregate, \Countable
     private $count;
 
     /**
+     * @var string
+     */
+    private $glue;
+
+    /**
      * StringCombination constructor.
      * @param mixed  $charset
      * @param int    $min
      * @param int    $max
+     * @param string $glue
+     * @throws \InvalidArgumentException
      */
-    public function __construct($charset, $min = 1, $max = null)
+    public function __construct($charset, $min = 1, $max = null, $glue = '')
     {
         if (is_string($charset) || is_integer($charset)) {
             $this->charset = preg_split('/(?<!^)(?!$)/u', $charset);
@@ -45,6 +52,7 @@ class StringCombinations implements \IteratorAggregate, \Countable
         }
         $this->min = (int) $min;
         $this->max = is_null($max) ? count($this->charset) : (int) $max;
+        $this->glue = $glue;
     }
 
     /**
@@ -67,7 +75,7 @@ class StringCombinations implements \IteratorAggregate, \Countable
     {
         foreach ($this->generateSets() as $set) {
             foreach (cartesian_product($set) as $combination) {
-                yield implode('', $combination);
+                yield implode($this->glue, $combination);
             }
         }
     }

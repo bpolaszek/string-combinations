@@ -110,52 +110,52 @@ cb
 cc
 ```
 
-**Using an array as first argument**
+**Using an array as first argument, and a separator**
 
 ```php
-foreach (string_combinations(['woof', 'meow', 'roar'], 2, 3) as $combination) {
+foreach (string_combinations(['woof', 'meow', 'roar'], 2, 3, '-') as $combination) {
     echo $combination . PHP_EOL;
 }
 ```
 
 Output:
 ```
-woofwoof
-woofmeow
-woofroar
-meowwoof
-meowmeow
-meowroar
-roarwoof
-roarmeow
-roarroar
-woofwoofwoof
-woofwoofmeow
-woofwoofroar
-woofmeowwoof
-woofmeowmeow
-woofmeowroar
-woofroarwoof
-woofroarmeow
-woofroarroar
-meowwoofwoof
-meowwoofmeow
-meowwoofroar
-meowmeowwoof
-meowmeowmeow
-meowmeowroar
-meowroarwoof
-meowroarmeow
-meowroarroar
-roarwoofwoof
-roarwoofmeow
-roarwoofroar
-roarmeowwoof
-roarmeowmeow
-roarmeowroar
-roarroarwoof
-roarroarmeow
-roarroarroar
+woof-woof
+woof-meow
+woof-roar
+meow-woof
+meow-meow
+meow-roar
+roar-woof
+roar-meow
+roar-roar
+woof-woof-woof
+woof-woof-meow
+woof-woof-roar
+woof-meow-woof
+woof-meow-meow
+woof-meow-roar
+woof-roar-woof
+woof-roar-meow
+woof-roar-roar
+meow-woof-woof
+meow-woof-meow
+meow-woof-roar
+meow-meow-woof
+meow-meow-meow
+meow-meow-roar
+meow-roar-woof
+meow-roar-meow
+meow-roar-roar
+roar-woof-woof
+roar-woof-meow
+roar-woof-roar
+roar-meow-woof
+roar-meow-meow
+roar-meow-roar
+roar-roar-woof
+roar-roar-meow
+roar-roar-roar
 ```
 
 Performance considerations
