@@ -8,6 +8,7 @@ require_once __DIR__ . '/StringCombinations.php';
  * @param $charset
  * @param int      $min
  * @param int|null $max
+ * @param string   $glue
  * @return StringCombinations
  */
 function string_combinations($charset, $min = 1, $max = null, $glue = '')
