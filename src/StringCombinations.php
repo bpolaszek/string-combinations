@@ -86,7 +86,7 @@ final class StringCombinations implements \IteratorAggregate, \Countable
      */
     public function getRandomString()
     {
-        $length = random_int($this->min, $this->max);
+        $length = mt_rand($this->min, $this->max);
         $charset = $this->charset;
         for ($pos = 0, $str = []; $pos < $length; $pos++) {
             shuffle($charset);
