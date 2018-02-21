@@ -81,6 +81,21 @@ class StringCombinations implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Creates a random string from current charset
+     * @return string
+     */
+    public function getRandomString()
+    {
+        $length = random_int($this->min, $this->max);
+        $charset = $this->charset;
+        for ($pos = 0, $str = []; $pos < $length; $pos++) {
+            shuffle($charset);
+            $str[] = $charset[0];
+        }
+        return implode('', $str);
+    }
+
+    /**
      * @return array
      */
     public function asArray()

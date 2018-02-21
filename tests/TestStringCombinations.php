@@ -169,4 +169,12 @@ class TestStringCombinations extends TestCase
         string_combinations([new \stdClass()]);
     }
 
+    public function testRandomString()
+    {
+        $combinations = string_combinations('abcdef', 6, 6);
+        $random = $combinations->getRandomString();
+        $this->assertEquals(6, strlen($random));
+        $this->assertNotEquals($random, $combinations->getRandomString());
+    }
+
 }
