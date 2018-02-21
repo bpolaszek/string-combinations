@@ -4,7 +4,7 @@ namespace BenTools\StringCombinations;
 
 use function BenTools\CartesianProduct\cartesian_product;
 
-class StringCombinations implements \IteratorAggregate, \Countable
+final class StringCombinations implements \IteratorAggregate, \Countable
 {
     /**
      * @var string[]
