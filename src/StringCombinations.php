@@ -68,6 +68,16 @@ final class StringCombinations implements \IteratorAggregate, \Countable
         return $this->count;
     }
 
+    public function countUniques()
+    {
+        $result = 0;
+        for ($i = ($this->max - 1); $i >= ($this->min - 1); $i--) {
+            $result += fact($this->max) / fact($i);
+        }
+        return $result;
+        return iterator_count($this->unDuplicateIterator());
+    }
+
     /**
      * @inheritDoc
      */
@@ -78,6 +88,78 @@ final class StringCombinations implements \IteratorAggregate, \Countable
                 yield implode($this->glue, $combination);
             }
         }
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function unDuplicateIterator()
+    {
+        $permute = function(array $charset, $length = null) {
+            $n = count($charset);
+
+            if ($length == null) {
+                $length = $n;
+            }
+
+            if ($length > $n) {
+                return;
+            }
+
+            $indices = range(0, $n - 1);
+            $cycles = range($n, $n - $length + 1, -1); // count down
+
+            yield array_slice($charset, 0, $length);
+
+            if ($n <= 0) {
+                return;
+            }
+
+            while (true) {
+                $exitEarly = false;
+                for ($i = $length; $i--; $i >= 0) {
+                    $cycles[$i]-= 1;
+                    if ($cycles[$i] == 0) {
+                        // Push whatever is at index $i to the end, move everything back
+                        if ($i < count($indices)) {
+                            $removed = array_splice($indices, $i, 1);
+                            array_push($indices, $removed[0]);
+                        }
+                        $cycles[$i] = $n - $i;
+                    } else {
+                        $j = $cycles[$i];
+                        // Swap indices $i & -$j.
+                        $value = $indices[$i];
+                        $negative = $indices[count($indices) - $j];
+                        $indices[$i] = $negative;
+                        $indices[count($indices) - $j] = $value;
+                        $result = [];
+                        $counter = 0;
+                        foreach ($indices as $index) {
+                            array_push($result, $charset[$index]);
+                            $counter++;
+                            if ($counter == $length) {
+                                break;
+                            }
+                        }
+                        yield $result;
+                        $exitEarly = true;
+                        break;
+                    }
+                }
+                if (!$exitEarly) {
+                    break; // Outer while loop
+                }
+            }
+        };
+
+        for ($i = $this->min; $i <= $this->max; $i++) {
+            foreach ($permute($this->charset, $i) as $combination) {
+                yield implode($this->glue, $combination);
+            }
+        }
+
     }
 
     /**
@@ -133,4 +215,6 @@ final class StringCombinations implements \IteratorAggregate, \Countable
     {
         throw new \InvalidArgumentException('Charset should be a string or an array of strings.');
     }
+
+
 }
