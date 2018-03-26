@@ -3,8 +3,15 @@
 namespace BenTools\StringCombinations;
 
 use function BenTools\CartesianProduct\cartesian_product;
+use IteratorAggregate;
 
-final class StringCombinations implements \IteratorAggregate, \Countable
+/**
+ * @property $min
+ * @property $max
+ * @property $charset
+ * @property $glue
+ */
+final class StringCombinations implements IteratorAggregate, StringCombinationsInterface
 {
     /**
      * @var string[]
@@ -41,7 +48,7 @@ final class StringCombinations implements \IteratorAggregate, \Countable
      */
     public function __construct($charset, $min = 1, $max = null, $glue = '')
     {
-        if (is_string($charset) || is_integer($charset)) {
+        if (is_string($charset) || is_int($charset)) {
             $this->charset = preg_split('/(?<!^)(?!$)/u', $charset);
             $this->validateCharset($this->charset);
         } elseif (is_array($charset)) {
@@ -51,8 +58,17 @@ final class StringCombinations implements \IteratorAggregate, \Countable
             $this->denyCharset();
         }
         $this->min = (int) $min;
-        $this->max = is_null($max) ? count($this->charset) : (int) $max;
+        $length = count($this->charset);
+        $this->max = null === $max ? $length : min((int) $max, $this->charset);
         $this->glue = $glue;
+    }
+
+    /**
+     * @return NoDuplicateLettersStringCombinations
+     */
+    public function withoutDuplicates()
+    {
+        return new NoDuplicateLettersStringCombinations($this);
     }
 
     /**
@@ -68,16 +84,6 @@ final class StringCombinations implements \IteratorAggregate, \Countable
         return $this->count;
     }
 
-    public function countUniques()
-    {
-        $result = 0;
-        for ($i = ($this->max - 1); $i >= ($this->min - 1); $i--) {
-            $result += fact($this->max) / fact($i);
-        }
-        return $result;
-        return iterator_count($this->unDuplicateIterator());
-    }
-
     /**
      * @inheritDoc
      */
@@ -90,91 +96,19 @@ final class StringCombinations implements \IteratorAggregate, \Countable
         }
     }
 
-
-    /**
-     * @inheritDoc
-     */
-    public function unDuplicateIterator()
-    {
-        $permute = function(array $charset, $length = null) {
-            $n = count($charset);
-
-            if ($length == null) {
-                $length = $n;
-            }
-
-            if ($length > $n) {
-                return;
-            }
-
-            $indices = range(0, $n - 1);
-            $cycles = range($n, $n - $length + 1, -1); // count down
-
-            yield array_slice($charset, 0, $length);
-
-            if ($n <= 0) {
-                return;
-            }
-
-            while (true) {
-                $exitEarly = false;
-                for ($i = $length; $i--; $i >= 0) {
-                    $cycles[$i]-= 1;
-                    if ($cycles[$i] == 0) {
-                        // Push whatever is at index $i to the end, move everything back
-                        if ($i < count($indices)) {
-                            $removed = array_splice($indices, $i, 1);
-                            array_push($indices, $removed[0]);
-                        }
-                        $cycles[$i] = $n - $i;
-                    } else {
-                        $j = $cycles[$i];
-                        // Swap indices $i & -$j.
-                        $value = $indices[$i];
-                        $negative = $indices[count($indices) - $j];
-                        $indices[$i] = $negative;
-                        $indices[count($indices) - $j] = $value;
-                        $result = [];
-                        $counter = 0;
-                        foreach ($indices as $index) {
-                            array_push($result, $charset[$index]);
-                            $counter++;
-                            if ($counter == $length) {
-                                break;
-                            }
-                        }
-                        yield $result;
-                        $exitEarly = true;
-                        break;
-                    }
-                }
-                if (!$exitEarly) {
-                    break; // Outer while loop
-                }
-            }
-        };
-
-        for ($i = $this->min; $i <= $this->max; $i++) {
-            foreach ($permute($this->charset, $i) as $combination) {
-                yield implode($this->glue, $combination);
-            }
-        }
-
-    }
-
     /**
      * Creates a random string from current charset
      * @return string
      */
     public function getRandomString()
     {
-        $length = mt_rand($this->min, $this->max);
+        $length = random_int($this->min, $this->max);
         $charset = $this->charset;
         for ($pos = 0, $str = []; $pos < $length; $pos++) {
             shuffle($charset);
             $str[] = $charset[0];
         }
-        return implode('', $str);
+        return implode($this->glue, $str);
     }
 
     /**
@@ -198,7 +132,7 @@ final class StringCombinations implements \IteratorAggregate, \Countable
 
     private function validateCharset($charset)
     {
-        if (is_null($charset)) {
+        if (null === $charset) {
             $this->denyCharset();
         }
         foreach ($charset as $value) {
@@ -216,5 +150,11 @@ final class StringCombinations implements \IteratorAggregate, \Countable
         throw new \InvalidArgumentException('Charset should be a string or an array of strings.');
     }
 
-
+    /**
+     * @inheritDoc
+     */
+    public function __get($name)
+    {
+        return $this->{$name};
+    }
 }

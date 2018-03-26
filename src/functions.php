@@ -30,3 +30,11 @@ function fact($number)
     }
     return $factorial;
 }
+
+
+function random_int($min, $max)
+{
+    static $callable;
+    $callable = function_exists('random_int') ? 'random_int' : 'mt_rand';
+    return $callable($min, $max);
+}
