@@ -18,6 +18,7 @@
     <testsuites>
         <testsuite name="Test Suite">
            <file>tests/TestStringCombinations.php</file>
+           <file>tests/NoDuplicateLettersStringCombinationsTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

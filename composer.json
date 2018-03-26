@@ -7,7 +7,7 @@
         "psr-4": {
             "BenTools\\StringCombinations\\" : "src"
         },
-        "files": ["src/function.php"]
+        "files": ["src/functions.php"]
     },
     "autoload-dev": {
         "psr-4": {

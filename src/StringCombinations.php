@@ -3,8 +3,16 @@
 namespace BenTools\StringCombinations;
 
 use function BenTools\CartesianProduct\cartesian_product;
+use Countable;
+use IteratorAggregate;
 
-final class StringCombinations implements \IteratorAggregate, \Countable
+/**
+ * @property $min
+ * @property $max
+ * @property $charset
+ * @property $glue
+ */
+final class StringCombinations implements IteratorAggregate, Countable
 {
     /**
      * @var string[]
@@ -41,7 +49,7 @@ final class StringCombinations implements \IteratorAggregate, \Countable
      */
     public function __construct($charset, $min = 1, $max = null, $glue = '')
     {
-        if (is_string($charset) || is_integer($charset)) {
+        if (is_string($charset) || is_int($charset)) {
             $this->charset = preg_split('/(?<!^)(?!$)/u', $charset);
             $this->validateCharset($this->charset);
         } elseif (is_array($charset)) {
@@ -51,8 +59,17 @@ final class StringCombinations implements \IteratorAggregate, \Countable
             $this->denyCharset();
         }
         $this->min = (int) $min;
-        $this->max = is_null($max) ? count($this->charset) : (int) $max;
+        $length = count($this->charset);
+        $this->max = null === $max ? $length : min((int) $max, $this->charset);
         $this->glue = $glue;
+    }
+
+    /**
+     * @return NoDuplicateLettersStringCombinations
+     */
+    public function withoutDuplicates()
+    {
+        return new NoDuplicateLettersStringCombinations($this);
     }
 
     /**
@@ -86,13 +103,13 @@ final class StringCombinations implements \IteratorAggregate, \Countable
      */
     public function getRandomString()
     {
-        $length = mt_rand($this->min, $this->max);
+        $length = random_int($this->min, $this->max);
         $charset = $this->charset;
         for ($pos = 0, $str = []; $pos < $length; $pos++) {
             shuffle($charset);
             $str[] = $charset[0];
         }
-        return implode('', $str);
+        return implode($this->glue, $str);
     }
 
     /**
@@ -116,7 +133,7 @@ final class StringCombinations implements \IteratorAggregate, \Countable
 
     private function validateCharset($charset)
     {
-        if (is_null($charset)) {
+        if (null === $charset) {
             $this->denyCharset();
         }
         foreach ($charset as $value) {
@@ -132,5 +149,13 @@ final class StringCombinations implements \IteratorAggregate, \Countable
     private function denyCharset()
     {
         throw new \InvalidArgumentException('Charset should be a string or an array of strings.');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __get($name)
+    {
+        return $this->{$name};
     }
 }

@@ -158,6 +158,86 @@ roar-roar-meow
 roar-roar-roar
 ```
 
+**No duplicates**
+
+You can avoid generating stings having the same letter more than once with the `withoutDuplicates()` method:
+
+```php
+$combinations = string_combinations('abc');
+var_dump(count($combinations)); // 39
+print_r($combinations->asArray());
+```
+
+> Array
+  (
+      [0] => a
+      [1] => b
+      [2] => c
+      [3] => aa
+      [4] => ab
+      [5] => ac
+      [6] => ba
+      [7] => bb
+      [8] => bc
+      [9] => ca
+      [10] => cb
+      [11] => cc
+      [12] => aaa
+      [13] => aab
+      [14] => aac
+      [15] => aba
+      [16] => abb
+      [17] => abc
+      [18] => aca
+      [19] => acb
+      [20] => acc
+      [21] => baa
+      [22] => bab
+      [23] => bac
+      [24] => bba
+      [25] => bbb
+      [26] => bbc
+      [27] => bca
+      [28] => bcb
+      [29] => bcc
+      [30] => caa
+      [31] => cab
+      [32] => cac
+      [33] => cba
+      [34] => cbb
+      [35] => cbc
+      [36] => cca
+      [37] => ccb
+      [38] => ccc
+  )
+
+
+```php
+$combinations = $combinations->withoutDuplicates();
+var_dump(count($combinations)); // 15
+print_r($combinations->asArray());
+```
+
+> Array
+  (
+      [0] => a
+      [1] => b
+      [2] => c
+      [3] => ab
+      [4] => ac
+      [5] => ba
+      [6] => bc
+      [7] => ca
+      [8] => cb
+      [9] => abc
+      [10] => acb
+      [11] => bac
+      [12] => bca
+      [13] => cab
+      [14] => cba
+  )
+
+
 Performance considerations
 --------------------------
 
@@ -179,13 +259,13 @@ printf(
     'Generated %d combinations in %ss - Memory usage: %sMB / Peak usage: %sMB' . PHP_EOL,
     ++$c,
     round($end - $start, 3),
-    round(memory_get_usage() / 1024 / 1024),
-    round(memory_get_peak_usage() / 1024 / 1024)
+    round(memory_get_usage(true) / 1024 / 1024),
+    round(memory_get_peak_usage(true) / 1024 / 1024)
 );
 ```
 
 Output:
-> Generated 19173960 combinations in 5.579s - Memory usage: 0MB / Peak usage: 1MB
+> Generated 19173960 combinations in 5.579s - Memory usage: 2MB / Peak usage: 2MB
 
 
 Tests
