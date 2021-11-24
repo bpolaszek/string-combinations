@@ -75,7 +75,7 @@ final class StringCombinations implements IteratorAggregate, Countable
     /**
      * @inheritDoc
      */
-    public function count()
+    public function count(): int
     {
         if (null === $this->count) {
             $this->count = array_sum(array_map(function ($set) {
@@ -88,7 +88,7 @@ final class StringCombinations implements IteratorAggregate, Countable
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         foreach ($this->generateSets() as $set) {
             foreach (cartesian_product($set) as $combination) {
