@@ -5,6 +5,7 @@ namespace BenTools\StringCombinations;
 use function BenTools\CartesianProduct\cartesian_product;
 use Countable;
 use IteratorAggregate;
+use Traversable;
 
 /**
  * @property $min
