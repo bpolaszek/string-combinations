@@ -18,37 +18,17 @@ final class StringCombinations implements IteratorAggregate, Countable
     /**
      * @var string[]
      */
-    private $charset;
+    private array $charset;
 
-    /**
-     * @var int
-     */
-    private $min;
+    private int $min;
 
-    /**
-     * @var int
-     */
-    private $max;
+    private int $max;
 
-    /**
-     * @var int
-     */
-    private $count;
+    private ?int $count = null;
 
-    /**
-     * @var string
-     */
-    private $glue;
+    private string $glue;
 
-    /**
-     * StringCombination constructor.
-     * @param mixed  $charset
-     * @param int    $min
-     * @param int    $max
-     * @param string $glue
-     * @throws \InvalidArgumentException
-     */
-    public function __construct($charset, $min = 1, $max = null, $glue = '')
+    public function __construct($charset, int $min = 1, ?int $max = null, string $glue = '')
     {
         if (is_string($charset) || is_int($charset)) {
             $this->charset = preg_split('/(?<!^)(?!$)/u', $charset);
@@ -59,23 +39,17 @@ final class StringCombinations implements IteratorAggregate, Countable
         } else {
             $this->denyCharset();
         }
-        $this->min = (int) $min;
+        $this->min = $min;
         $length = count($this->charset);
         $this->max = null === $max ? $length : min((int) $max, $this->charset);
         $this->glue = $glue;
     }
 
-    /**
-     * @return NoDuplicateLettersStringCombinations
-     */
-    public function withoutDuplicates()
+    public function withoutDuplicates(): NoDuplicateLettersStringCombinations
     {
         return new NoDuplicateLettersStringCombinations($this);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function count(): int
     {
         if (null === $this->count) {
@@ -86,9 +60,6 @@ final class StringCombinations implements IteratorAggregate, Countable
         return $this->count;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getIterator(): Traversable
     {
         foreach ($this->generateSets() as $set) {
@@ -102,7 +73,7 @@ final class StringCombinations implements IteratorAggregate, Countable
      * Creates a random string from current charset
      * @return string
      */
-    public function getRandomString()
+    public function getRandomString(): string
     {
         $length = random_int($this->min, $this->max);
         $charset = $this->charset;
@@ -113,18 +84,12 @@ final class StringCombinations implements IteratorAggregate, Countable
         return implode($this->glue, $str);
     }
 
-    /**
-     * @return array
-     */
-    public function asArray()
+    public function asArray(): array
     {
         return iterator_to_array($this);
     }
 
-    /**
-     * @return \Generator
-     */
-    private function generateSets()
+    private function generateSets(): \Generator
     {
         for ($i = $this->min; $i <= $this->max; $i++) {
             $set = array_fill(0, $i, $this->charset);
@@ -132,7 +97,7 @@ final class StringCombinations implements IteratorAggregate, Countable
         }
     }
 
-    private function validateCharset($charset)
+    private function validateCharset($charset): void
     {
         if (null === $charset) {
             $this->denyCharset();

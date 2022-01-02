@@ -3,27 +3,20 @@
 namespace BenTools\StringCombinations;
 
 use Countable;
+use Generator;
 use IteratorAggregate;
+use Traversable;
 
 final class NoDuplicateLettersStringCombinations implements IteratorAggregate, Countable
 {
-    /**
-     * @var StringCombinations
-     */
-    private $stringCombinations;
+    private StringCombinations $stringCombinations;
 
-    /**
-     * UniqueStringCombinations constructor.
-     */
     public function __construct(StringCombinations $stringCombinations)
     {
         $this->stringCombinations = $stringCombinations;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         for ($i = $this->stringCombinations->min; $i <= $this->stringCombinations->max; $i++) {
             foreach ($this->permute($this->stringCombinations->charset, $i) as $combination) {
@@ -32,10 +25,7 @@ final class NoDuplicateLettersStringCombinations implements IteratorAggregate, C
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function count()
+    public function count(): int
     {
         $arr = [];
 
@@ -50,7 +40,7 @@ final class NoDuplicateLettersStringCombinations implements IteratorAggregate, C
         return array_sum(array_map('array_product', $arr));
     }
 
-    private function permute(array $charset, $length = null)
+    private function permute(array $charset, $length = null): Generator
     {
         $n = count($charset);
 
@@ -107,10 +97,7 @@ final class NoDuplicateLettersStringCombinations implements IteratorAggregate, C
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getRandomString()
+    public function getRandomString(): string
     {
         $charset = $this->stringCombinations->charset;
         $string = [];
@@ -126,10 +113,7 @@ final class NoDuplicateLettersStringCombinations implements IteratorAggregate, C
         return implode($this->stringCombinations->glue, $string);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function asArray()
+    public function asArray(): array
     {
         return iterator_to_array($this);
     }

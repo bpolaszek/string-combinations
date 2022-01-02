@@ -1,7 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/bentools/string-combinations/v/stable)](https://packagist.org/packages/bentools/string-combinations)
 [![License](https://poser.pugx.org/bentools/string-combinations/license)](https://packagist.org/packages/bentools/string-combinations)
-[![Build Status](https://img.shields.io/travis/bpolaszek/string-combinations/master.svg?style=flat-square)](https://travis-ci.org/bpolaszek/string-combinations)
-[![Coverage Status](https://coveralls.io/repos/github/bpolaszek/string-combinations/badge.svg?branch=master)](https://coveralls.io/github/bpolaszek/string-combinations?branch=master)
+[![CI Workflow](https://github.com/bpolaszek/string-combinations/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/bpolaszek/string-combinations/actions/workflows/ci-workflow.yml)
+[![Coverage](https://codecov.io/gh/bpolaszek/string-combinations/branch/master/graph/badge.svg?token=CF8DRI9XDW)](https://codecov.io/gh/bpolaszek/string-combinations)
 [![Quality Score](https://img.shields.io/scrutinizer/g/bpolaszek/string-combinations.svg?style=flat-square)](https://scrutinizer-ci.com/g/bpolaszek/string-combinations)
 [![Total Downloads](https://poser.pugx.org/bentools/string-combinations/downloads)](https://packagist.org/packages/bentools/string-combinations)
 
@@ -12,7 +12,7 @@ A simple, low-memory footprint function to generate all string combinations from
 Installation
 ------------
 
-PHP 5.6+ is required.
+PHP 7.4+ is required.
 
 > composer require bentools/string-combinations
 
