@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class TestStringCombinations extends TestCase
 {
 
-    public function testWithDefaults()
+    public function testWithDefaults(): void
     {
         $sc = string_combinations('abc');
         $expectedCount = 39; // (3^1) + (3^2) + (3^3)
@@ -60,7 +60,7 @@ class TestStringCombinations extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testWithMinValue()
+    public function testWithMinValue(): void
     {
         $sc = string_combinations('abc', 2);
         $expectedCount = 36; // (3^2) + (3^3)
@@ -109,7 +109,7 @@ class TestStringCombinations extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testWithMinAndMaxValue()
+    public function testWithMinAndMaxValue(): void
     {
         $sc = string_combinations('abc', 2, 2);
         $expectedCount = 9; // (3^2)
@@ -131,7 +131,7 @@ class TestStringCombinations extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testWithArrayCharset()
+    public function testWithArrayCharset(): void
     {
         $sc = string_combinations(['a1', 'b2', 'c3'], 2, 2, '-');
         $expectedCount = 9; // (3^2)
@@ -153,23 +153,19 @@ class TestStringCombinations extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidCharset()
+    public function testInvalidCharset(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         string_combinations(new \stdClass());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidCharsetWithinArray()
+    public function testInvalidCharsetWithinArray(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         string_combinations([new \stdClass()]);
     }
 
-    public function testRandomString()
+    public function testRandomString(): void
     {
         $combinations = string_combinations('abcdef', 6, 6);
         $random = $combinations->getRandomString();
