@@ -2,7 +2,7 @@
 
 namespace BenTools\StringCombinations;
 
-use function BenTools\CartesianProduct\cartesian_product;
+use function BenTools\CartesianProduct\combinations;
 use Countable;
 use IteratorAggregate;
 use Traversable;
@@ -54,7 +54,7 @@ final class StringCombinations implements IteratorAggregate, Countable
     {
         if (null === $this->count) {
             $this->count = array_sum(array_map(function ($set) {
-                return count(cartesian_product($set));
+                return count(combinations($set));
             }, iterator_to_array($this->generateSets())));
         }
         return $this->count;
@@ -63,7 +63,7 @@ final class StringCombinations implements IteratorAggregate, Countable
     public function getIterator(): Traversable
     {
         foreach ($this->generateSets() as $set) {
-            foreach (cartesian_product($set) as $combination) {
+            foreach (combinations($set) as $combination) {
                 yield implode($this->glue, $combination);
             }
         }
