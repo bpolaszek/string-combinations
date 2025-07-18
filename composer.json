@@ -19,7 +19,7 @@
     },
     "require": {
         "php": ">=7.4",
-        "bentools/cartesian-product": "^1.1"
+        "bentools/cartesian-product": "^1.5|^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0|^9.0",
